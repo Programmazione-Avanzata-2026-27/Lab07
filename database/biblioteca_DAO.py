@@ -9,5 +9,17 @@ from model.biblioteca_DTO import Biblioteca
 class BibliotecaDAO:
     def __init__(self):
         pass
-
-    # TODO
+    @staticmethod
+    def get_biblioteche():
+        cnx = DBConnect.get_connection()
+        if cnx is None:
+            return []
+        cursor = cnx.cursor(dictionary=True)
+        query = "SELECT id, nome, indirizzo FROM biblioteca ORDER BY nome"
+        cursor.execute(query)
+        risultato = []
+        for row in cursor:
+            risultato.append(Biblioteca(row["id"], row["nome"], row["indirizzo"]))
+        cursor.close()
+        cnx.close()
+        return risultato
